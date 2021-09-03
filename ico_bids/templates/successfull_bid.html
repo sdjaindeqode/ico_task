@@ -1,0 +1,46 @@
+{% extends 'basic.html' %}
+{% block css %}
+<style>
+    .divform{
+        display: inline;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<div class="container">
+    <h4>Successfull bids</h4>
+    {% if queryset %}
+    <div id="bidlist">
+        <table class="table">
+            <thead>
+                <tr>
+                <th>Bid ID</th>
+                <th>Token</th>
+                <th>User</th>
+                <th>Bid price</th>
+                <th>Tokens Requested</th>
+                <th>Tokens Alloted</th>
+                <th>Status</th>
+            </tr>
+            </thead>
+            <tbody id="table_body">
+            {% for bid in queryset %}
+            <tr class="info" id="tr{{bid.id}}">
+                <td>{{bid.id}}</td>
+                <td>{{bid.token.name}}</td>
+                <td>{{bid.user.username}}</td>
+                <td>{{bid.bid_price}}</td>
+                <td>{{bid.number_of_token}}</td>
+                <td>{{bid.alloted_tokens}}</td>
+                <td>{{bid.status}}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        <h5>There are no successfull bids to be shown.</h5>
+    {% endif %}
+    <hr/>
+</div>
+{% endblock %}

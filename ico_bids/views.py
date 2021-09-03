@@ -10,6 +10,7 @@ from rest_framework.generics import (
 )
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.renderers import TemplateHTMLRenderer
 from .serializers import TokenSerializer, BidSerializer
 from .models import Token, Bid
 # Create your views here.
@@ -130,7 +131,12 @@ class SuccessBidView(ListAPIView):
     """
     permission_classes = (AllowAny,)
     serializer_class = BidSerializer
-    queryset = Bid.objects.filter(status=Bid.STATUS[0][0])
+    renderer_classes = [TemplateHTMLRenderer]
+
+    def get(self, request, *args, **kwargs):
+        queryset = Bid.objects.filter(status=Bid.STATUS[0][0])
+        return Response({'queryset': queryset}, template_name='successfull_bid.html') 
+
 
 
 class FailedBidView(ListAPIView):
@@ -142,4 +148,8 @@ class FailedBidView(ListAPIView):
     """
     permission_classes = (AllowAny,)
     serializer_class = BidSerializer
-    queryset = Bid.objects.filter(status=Bid.STATUS[1][0])
+    renderer_classes = [TemplateHTMLRenderer]
+
+    def get(self, request, *args, **kwargs):
+        queryset = Bid.objects.filter(status=Bid.STATUS[1][0])
+        return Response({'queryset': queryset}, template_name='failed_bid.html') 
