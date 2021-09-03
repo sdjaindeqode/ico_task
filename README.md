@@ -97,11 +97,11 @@ For accessing successfull bid:
     
     method: 'get'
     endpoint: '/api/v1/bid/success'
-    returns: list of successfull bids
+    returns: renders template showing all successfull bids
 
 
 For accessing failed bid:
     
     method: 'get'
     endpoint: '/api/v1/bid/failed'
-    returns: list of failed bids
+    returns: renders template showing all failed bids
