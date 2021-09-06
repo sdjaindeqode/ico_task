@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from rest_framework import status
@@ -102,12 +103,21 @@ class CreateBidView(CreateAPIView):
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
         validated_data = serializer.validated_data
+        token = validated_data['token']
+        curr_time = datetime.now().time()
+        if not token.start_time < curr_time < token.end_time:
+            response = {
+                'message': 'Please bid during bidding timing of the token'
+            }
+            return Response(
+                response, status=status.HTTP_403_FORBIDDEN
+            )
         try:
             bid = (
                 Bid.objects
                 .get(
                     user=self.request.user,
-                    token=validated_data['token'],
+                    token=token,
                 )
             )
         except Bid.DoesNotExist:
