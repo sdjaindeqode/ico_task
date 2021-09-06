@@ -112,19 +112,14 @@ class CreateBidView(CreateAPIView):
             return Response(
                 response, status=status.HTTP_403_FORBIDDEN
             )
-        try:
-            bid = (
-                Bid.objects
-                .get(
-                    user=self.request.user,
-                    token=token,
-                )
-            )
-        except Bid.DoesNotExist:
-            bid = None
-
+        bid = Bid.objects.filter(user=self.request.user, token=token)
         if bid:
-            serializer.instance = bid
+            response = {
+                'message': 'You have already created a bid for the token. Please update it.'
+            }
+            return Response(
+                response, status=status.HTTP_400_BAD_REQUEST
+            )
         serializer.save(user=self.request.user)
         headers = self.get_success_headers(serializer.data)
         return Response(
